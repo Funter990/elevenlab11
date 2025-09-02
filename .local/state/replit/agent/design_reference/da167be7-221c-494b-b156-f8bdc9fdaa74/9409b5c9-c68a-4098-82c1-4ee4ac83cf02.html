@@ -1,0 +1,1054 @@
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ali Voice Generator Tool v1.1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    borderRadius: {
+                        lg: "var(--radius)",
+                        md: "calc(var(--radius) - 2px)",
+                        sm: "calc(var(--radius) - 4px)",
+                    },
+                    colors: {
+                        background: "var(--background)",
+                        foreground: "var(--foreground)",
+                        card: {
+                            DEFAULT: "var(--card)",
+                            foreground: "var(--card-foreground)",
+                        },
+                        popover: {
+                            DEFAULT: "var(--popover)",
+                            foreground: "var(--popover-foreground)",
+                        },
+                        primary: {
+                            DEFAULT: "var(--primary)",
+                            foreground: "var(--primary-foreground)",
+                        },
+                        secondary: {
+                            DEFAULT: "var(--secondary)",
+                            foreground: "var(--secondary-foreground)",
+                        },
+                        muted: {
+                            DEFAULT: "var(--muted)",
+                            foreground: "var(--muted-foreground)",
+                        },
+                        accent: {
+                            DEFAULT: "var(--accent)",
+                            foreground: "var(--accent-foreground)",
+                        },
+                        destructive: {
+                            DEFAULT: "var(--destructive)",
+                            foreground: "var(--destructive-foreground)",
+                        },
+                        border: "var(--border)",
+                        input: "var(--input)",
+                        ring: "var(--ring)",
+                        chart: {
+                            "1": "var(--chart-1)",
+                            "2": "var(--chart-2)",
+                            "3": "var(--chart-3)",
+                            "4": "var(--chart-4)",
+                            "5": "var(--chart-5)",
+                        }
+                    },
+                    fontFamily: {
+                        sans: ["var(--font-sans)"],
+                        serif: ["var(--font-serif)"],
+                        mono: ["var(--font-mono)"],
+                    }
+                },
+            }
+        };
+    </script>
+    <style>
+        :root {
+            --card: #fcfcfc;
+            --ring: hsl(0, 0%, 41.96%);
+            --input: #b5b5b5;
+            --muted: #e3e3e3;
+            --accent: hsl(0, 0%, 100%);
+            --border: #e8e8e8;
+            --radius: 0.8rem;
+            --shadow: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00), 0px 1px 2px -1px hsl(9, 75%, 61% / 0.00);
+            --chart-1: hsl(203.8863, 88.2845%, 53.1373%);
+            --chart-2: hsl(159.7826, 100%, 36.0784%);
+            --chart-3: hsl(42.0290, 92.8251%, 56.2745%);
+            --chart-4: hsl(147.1429, 78.5047%, 41.9608%);
+            --chart-5: hsl(341.4894, 75.2000%, 50.9804%);
+            --popover: hsl(45, 25%, 97%);
+            --primary: #eb1a4e;
+            --sidebar: hsl(45, 25%, 97%);
+            --spacing: 0.25rem;
+            --font-mono: Menlo, monospace;
+            --font-sans: 'Poppins', sans-serif;
+            --secondary: #c4c4c4;
+            --shadow-lg: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00), 0px 4px 6px -1px hsl(9, 75%, 61% / 0.00);
+            --shadow-md: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00), 0px 2px 4px -1px hsl(9, 75%, 61% / 0.00);
+            --shadow-sm: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00), 0px 1px 2px -1px hsl(9, 75%, 61% / 0.00);
+            --shadow-xl: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00), 0px 8px 10px -1px hsl(9, 75%, 61% / 0.00);
+            --shadow-xs: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00);
+            --background: #f0f0f0;
+            --font-serif: 'Poppins', sans-serif;
+            --foreground: #1a1a1a;
+            --shadow-2xl: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00);
+            --shadow-2xs: 0px 2px 0px 0px hsl(9, 75%, 61% / 0.00);
+            --destructive: hsl(0, 0%, 0%);
+            --sidebar-ring: hsl(9, 75%, 61%);
+            --sidebar-accent: hsl(25, 45%, 80%);
+            --sidebar-border: hsl(45, 15%, 80%);
+            --card-foreground: hsl(0, 0%, 0%);
+            --sidebar-primary: hsl(9, 75%, 61%);
+            --tracking-normal: 0em;
+            --muted-foreground: #212121;
+            --accent-foreground: hsl(0, 0%, 10.2%);
+            --popover-foreground: hsl(0, 0%, 100%);
+            --primary-foreground: #ffffff;
+            --sidebar-foreground: hsl(20, 14%, 17%);
+            --secondary-foreground: #1a1a1a;
+            --destructive-foreground: #ffffff;
+            --sidebar-accent-foreground: hsl(20, 14%, 17%);
+            --sidebar-primary-foreground: hsl(0, 0%, 100%);
+        }
+
+        .dark {
+            --card: hsl(20, 14%, 8%);
+            --ring: hsl(9, 75%, 61%);
+            --input: hsl(20, 14%, 18%);
+            --muted: hsl(20, 14%, 15%);
+            --accent: hsl(25, 45%, 20%);
+            --border: hsl(20, 14%, 15%);
+            --chart-1: hsl(203.8863, 88.2845%, 53.1373%);
+            --chart-2: hsl(159.7826, 100%, 36.0784%);
+            --chart-3: hsl(42.0290, 92.8251%, 56.2745%);
+            --chart-4: hsl(147.1429, 78.5047%, 41.9608%);
+            --chart-5: hsl(341.4894, 75.2000%, 50.9804%);
+            --popover: hsl(20, 14%, 4%);
+            --primary: hsl(9, 75%, 61%);
+            --sidebar: hsl(20, 14%, 8%);
+            --secondary: hsl(30, 15%, 52%);
+            --background: hsl(20, 14%, 4%);
+            --foreground: hsl(45, 25%, 91%);
+            --destructive: hsl(356.3033, 90.5579%, 54.3137%);
+            --sidebar-ring: hsl(9, 75%, 61%);
+            --sidebar-accent: hsl(25, 45%, 20%);
+            --sidebar-border: hsl(20, 14%, 15%);
+            --card-foreground: hsl(45, 25%, 85%);
+            --sidebar-primary: hsl(9, 75%, 61%);
+            --muted-foreground: hsl(45, 15%, 46%);
+            --accent-foreground: hsl(45, 25%, 85%);
+            --popover-foreground: hsl(45, 25%, 91%);
+            --primary-foreground: hsl(0, 0%, 100%);
+            --sidebar-foreground: hsl(45, 25%, 85%);
+            --secondary-foreground: hsl(0, 0%, 100%);
+            --destructive-foreground: hsl(0, 0%, 100%);
+            --sidebar-accent-foreground: hsl(45, 25%, 85%);
+            --sidebar-primary-foreground: hsl(0, 0%, 100%);
+        }
+
+        .animate-spin-slow {
+            animation: spin 2s linear infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), hsl(9, 75%, 45%));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary), hsl(9, 75%, 45%));
+            animation: progress 1.5s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .voice-item {
+            transition: all 0.2s ease;
+        }
+
+        .voice-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(235, 26, 78, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground font-sans min-h-screen">
+    <!-- @COMPONENT: Header -->
+    <header class="bg-card border-b border-border sticky top-0 z-50 backdrop-blur-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-microphone text-primary-foreground text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold gradient-text">Ali Voice Generator</h1>
+                        <p class="text-xs text-muted-foreground">Tool Version 1.1</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-lg bg-muted hover:bg-accent transition-colors" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <a href="https://wa.me/03107835694" target="_blank" class="flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fab fa-whatsapp"></i>
+                        <span class="hidden sm:block">Contact Developer</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <!-- @COMPONENT: MainLayout -->
+    <div class="container mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Main Content Area -->
+        <div class="lg:col-span-3 space-y-6">
+            
+            <!-- Script Input Section -->
+            <!-- @COMPONENT: ScriptInput -->
+            <div class="bg-card rounded-lg border border-border p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-file-text text-primary mr-2"></i>
+                        Script Input
+                    </h2>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="uploadFile()" class="text-sm bg-muted hover:bg-accent px-3 py-1 rounded-md transition-colors">
+                            <i class="fas fa-upload mr-1"></i>
+                            Upload .txt
+                        </button>
+                        <button onclick="clearScript()" class="text-sm bg-muted hover:bg-accent px-3 py-1 rounded-md transition-colors">
+                            <i class="fas fa-trash mr-1"></i>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                
+                <textarea 
+                    id="scriptInput" 
+                    placeholder="Enter your script here... The text will be converted to speech using the selected voice settings."
+                    class="w-full h-32 bg-background border border-input rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
+                    oninput="updateCharacterCount()"
+                ></textarea>
+                
+                <!-- Character Count Display -->
+                <div class="flex items-center justify-between mt-3">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-muted-foreground">
+                            <span class="font-medium" id="charCount" data-bind="scriptLength">0</span> / 10,000 characters
+                        </div>
+                        <div class="text-sm text-muted-foreground">
+                            <span class="font-medium" id="alphabetCount" data-bind="alphabetLength">0</span> alphabetic chars
+                        </div>
+                    </div>
+                    <div id="charStatus" class="text-sm font-medium text-green-600">
+                        <i class="fas fa-check-circle mr-1"></i>
+                        Within limit
+                    </div>
+                </div>
+                
+                <!-- Progress Bar for Character Limit -->
+                <div class="mt-2 w-full bg-muted rounded-full h-2">
+                    <div id="charProgress" class="h-2 bg-primary rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                
+                <input type="file" id="fileInput" accept=".txt" style="display: none;" onchange="handleFileUpload(event)">
+            </div>
+            <!-- @END_COMPONENT: ScriptInput -->
+
+            <!-- Configuration Section -->
+            <!-- @COMPONENT: Configuration -->
+            <div class="bg-card rounded-lg border border-border p-6 shadow-sm">
+                <h2 class="text-lg font-semibold mb-4 flex items-center">
+                    <i class="fas fa-cog text-primary mr-2"></i>
+                    Voice Configuration
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- API Configuration -->
+                    <div class="space-y-4">
+                        <h3 class="font-medium text-sm text-muted-foreground uppercase tracking-wide">API Settings</h3>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">API Key</label>
+                            <input 
+                                type="password" 
+                                id="apiKey" 
+                                placeholder="sk_your_elevenlabs_api_key_here"
+                                class="w-full bg-background border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
+                            >
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Voice ID</label>
+                            <div class="flex space-x-2">
+                                <input 
+                                    type="text" 
+                                    id="voiceId" 
+                                    placeholder="Voice ID (e.g., 80lPKtzJMPh1vjYMUgwe)"
+                                    class="flex-1 bg-background border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
+                                >
+                                <button onclick="showRecentVoices()" class="bg-muted hover:bg-accent px-3 py-2 rounded-lg transition-colors">
+                                    <i class="fas fa-history"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Model</label>
+                            <select 
+                                id="modelSelect" 
+                                class="w-full bg-background border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-colors"
+                            >
+                                <option value="eleven_flash_v2_5">Eleven Flash V2.5 (Fast)</option>
+                                <option value="eleven_multilingual_v2">Eleven Multilingual V2</option>
+                                <option value="eleven_v3">Eleven V3 (Premium)</option>
+                                <option value="eleven_turbo_v2_5">Eleven Turbo V2.5 (Fastest)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Voice Settings -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-sm text-muted-foreground uppercase tracking-wide">Voice Settings</h3>
+                            <button onclick="resetSettings()" class="text-sm bg-muted hover:bg-accent px-3 py-1 rounded-md transition-colors">
+                                <i class="fas fa-undo mr-1"></i>
+                                Reset
+                            </button>
+                        </div>
+                        
+                        <!-- Stability -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Stability: <span id="stabilityValue" class="text-primary font-mono">50%</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="stability" 
+                                min="0" 
+                                max="100" 
+                                value="50"
+                                class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
+                                oninput="updateSliderValue('stability', this.value)"
+                            >
+                        </div>
+                        
+                        <!-- Similarity Boost -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Similarity Boost: <span id="similarityValue" class="text-primary font-mono">65%</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="similarity" 
+                                min="0" 
+                                max="100" 
+                                value="65"
+                                class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
+                                oninput="updateSliderValue('similarity', this.value)"
+                            >
+                        </div>
+                        
+                        <!-- Style Exaggeration -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Style Exaggeration: <span id="styleValue" class="text-primary font-mono">0%</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="styleExaggeration" 
+                                min="0" 
+                                max="100" 
+                                value="0"
+                                class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
+                                oninput="updateSliderValue('styleExaggeration', this.value)"
+                            >
+                        </div>
+                        
+                        <!-- Speed -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Speed: <span id="speedValue" class="text-primary font-mono">0.85x</span>
+                            </label>
+                            <input 
+                                type="range" 
+                                id="speed" 
+                                min="0.25" 
+                                max="2.0" 
+                                step="0.05" 
+                                value="0.85"
+                                class="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer"
+                                oninput="updateSliderValue('speed', this.value)"
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: Configuration -->
+
+            <!-- Generation Section -->
+            <!-- @COMPONENT: Generation -->
+            <div class="bg-card rounded-lg border border-border p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-play-circle text-primary mr-2"></i>
+                        Voice Generation
+                    </h2>
+                    <div class="flex items-center space-x-2">
+                        <label class="flex items-center space-x-2 text-sm">
+                            <input type="checkbox" id="autoSave" class="rounded border-input">
+                            <span>Auto-save all voices</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Generation Button -->
+                <button 
+                    onclick="generateVoice()" 
+                    id="generateBtn"
+                    class="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm hover:shadow-md"
+                >
+                    <i class="fas fa-microphone-alt"></i>
+                    <span>Generate Voice</span>
+                </button>
+                
+                <!-- Progress Indicator -->
+                <div id="progressContainer" class="mt-4 hidden">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <div class="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin-slow"></div>
+                        <span class="text-sm text-muted-foreground">Generating voice...</span>
+                    </div>
+                    <div class="w-full bg-muted rounded-full h-2">
+                        <div class="progress-bar h-2 rounded-full w-full"></div>
+                    </div>
+                </div>
+                
+                <!-- Success State -->
+                <div id="successContainer" class="mt-4 hidden">
+                    <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                                <div>
+                                    <p class="font-medium text-green-900 dark:text-green-100">Voice generated successfully!</p>
+                                    <p class="text-sm text-green-700 dark:text-green-300" id="successMessage">Ready for download</p>
+                                </div>
+                            </div>
+                            <button 
+                                onclick="downloadVoice()" 
+                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+                            >
+                                <i class="fas fa-download"></i>
+                                <span>Download MP3</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Error State -->
+                <div id="errorContainer" class="mt-4 hidden">
+                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                            <div>
+                                <p class="font-medium text-red-900 dark:text-red-100">Generation failed</p>
+                                <p class="text-sm text-red-700 dark:text-red-300" id="errorMessage">Please check your settings and try again.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: Generation -->
+        </div>
+
+        <!-- Sidebar -->
+        <!-- @COMPONENT: Sidebar -->
+        <div class="lg:col-span-1 space-y-6">
+            
+            <!-- Voice History -->
+            <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold flex items-center">
+                        <i class="fas fa-history text-primary mr-2 text-sm"></i>
+                        Voice History
+                    </h3>
+                    <button onclick="clearHistory()" class="text-xs bg-muted hover:bg-accent px-2 py-1 rounded transition-colors">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                
+                <div id="voiceHistory" class="space-y-2">
+                    <!-- Voice history items will be populated here -->
+                    <div class="text-sm text-muted-foreground text-center py-4">
+                        No voices generated yet
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Voice IDs -->
+            <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+                <h3 class="font-semibold mb-4 flex items-center">
+                    <i class="fas fa-star text-primary mr-2 text-sm"></i>
+                    Recent Voice IDs
+                </h3>
+                
+                <div id="recentVoiceIds" class="space-y-2">
+                    <!-- Recent voice IDs will be populated here -->
+                    <div class="text-sm text-muted-foreground text-center py-2">
+                        No recent voice IDs
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="bg-card rounded-lg border border-border p-4 shadow-sm">
+                <h3 class="font-semibold mb-4 flex items-center">
+                    <i class="fas fa-bolt text-primary mr-2 text-sm"></i>
+                    Quick Actions
+                </h3>
+                
+                <div class="space-y-2">
+                    <button onclick="saveSettings()" class="w-full text-left bg-muted hover:bg-accent px-3 py-2 rounded-lg transition-colors text-sm">
+                        <i class="fas fa-save mr-2"></i>
+                        Save Settings
+                    </button>
+                    <button onclick="loadSettings()" class="w-full text-left bg-muted hover:bg-accent px-3 py-2 rounded-lg transition-colors text-sm">
+                        <i class="fas fa-folder-open mr-2"></i>
+                        Load Settings
+                    </button>
+                    <button onclick="exportHistory()" class="w-full text-left bg-muted hover:bg-accent px-3 py-2 rounded-lg transition-colors text-sm">
+                        <i class="fas fa-file-export mr-2"></i>
+                        Export History
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+    </div>
+    <!-- @END_COMPONENT: MainLayout -->
+
+    <!-- Modals and Overlays -->
+    <!-- @COMPONENT: RecentVoicesModal -->
+    <div id="recentVoicesModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-card rounded-lg border border-border p-6 w-full max-w-md shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">Recent Voice IDs</h3>
+                    <button onclick="closeRecentVoices()" class="text-muted-foreground hover:text-foreground">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div id="recentVoicesList" class="space-y-2 max-h-60 overflow-y-auto">
+                    <!-- Recent voices will be populated here -->
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-border">
+                    <button onclick="closeRecentVoices()" class="w-full bg-muted hover:bg-accent py-2 rounded-lg transition-colors">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: RecentVoicesModal -->
+
+    <script>
+        // Application State
+        let voiceHistory = [];
+        let recentVoiceIds = [];
+        let currentVoiceBlob = null;
+        let voiceCounter = 1;
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettingsFromStorage();
+            loadHistoryFromStorage();
+            updateCharacterCount();
+        });
+
+        // Character count and validation
+        function updateCharacterCount() {
+            const script = document.getElementById('scriptInput').value;
+            const charCount = script.length;
+            const alphabetCount = (script.match(/[A-Za-zÀ-ÿ]/g) || []).length;
+            
+            document.getElementById('charCount').textContent = charCount;
+            document.getElementById('alphabetCount').textContent = alphabetCount;
+            
+            const percentage = (charCount / 10000) * 100;
+            document.getElementById('charProgress').style.width = `${Math.min(percentage, 100)}%`;
+            
+            const statusElement = document.getElementById('charStatus');
+            if (charCount > 10000) {
+                statusElement.innerHTML = `<i class="fas fa-exclamation-triangle mr-1"></i>Exceeds limit by ${charCount - 10000}`;
+                statusElement.className = 'text-sm font-medium text-destructive';
+                document.getElementById('charProgress').className = 'h-2 bg-destructive rounded-full transition-all duration-300';
+            } else if (charCount > 8000) {
+                statusElement.innerHTML = `<i class="fas fa-exclamation-circle mr-1"></i>${10000 - charCount} characters remaining`;
+                statusElement.className = 'text-sm font-medium text-yellow-600';
+                document.getElementById('charProgress').className = 'h-2 bg-yellow-500 rounded-full transition-all duration-300';
+            } else {
+                statusElement.innerHTML = `<i class="fas fa-check-circle mr-1"></i>Within limit`;
+                statusElement.className = 'text-sm font-medium text-green-600';
+                document.getElementById('charProgress').className = 'h-2 bg-primary rounded-full transition-all duration-300';
+            }
+        }
+
+        // File upload handling
+        function uploadFile() {
+            document.getElementById('fileInput').click();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file && file.type === 'text/plain') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let content = e.target.result;
+                    // Convert to single paragraph without removing punctuation
+                    content = content.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+                    document.getElementById('scriptInput').value = content;
+                    updateCharacterCount();
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function clearScript() {
+            document.getElementById('scriptInput').value = '';
+            updateCharacterCount();
+        }
+
+        // Slider value updates
+        function updateSliderValue(sliderId, value) {
+            const element = document.getElementById(sliderId + 'Value');
+            if (sliderId === 'speed') {
+                element.textContent = `${value}x`;
+            } else {
+                element.textContent = `${value}%`;
+            }
+            saveSettingsToStorage();
+        }
+
+        // Settings management
+        function resetSettings() {
+            document.getElementById('stability').value = 50;
+            document.getElementById('similarity').value = 65;
+            document.getElementById('styleExaggeration').value = 0;
+            document.getElementById('speed').value = 0.85;
+            
+            updateSliderValue('stability', 50);
+            updateSliderValue('similarity', 65);
+            updateSliderValue('styleExaggeration', 0);
+            updateSliderValue('speed', 0.85);
+        }
+
+        function saveSettings() {
+            saveSettingsToStorage();
+            showToast('Settings saved successfully!', 'success');
+        }
+
+        function loadSettings() {
+            loadSettingsFromStorage();
+            showToast('Settings loaded successfully!', 'success');
+        }
+
+        function saveSettingsToStorage() {
+            const settings = {
+                apiKey: document.getElementById('apiKey').value,
+                voiceId: document.getElementById('voiceId').value,
+                model: document.getElementById('modelSelect').value,
+                stability: document.getElementById('stability').value,
+                similarity: document.getElementById('similarity').value,
+                styleExaggeration: document.getElementById('styleExaggeration').value,
+                speed: document.getElementById('speed').value,
+                autoSave: document.getElementById('autoSave').checked
+            };
+            localStorage.setItem('voiceGeneratorSettings', JSON.stringify(settings));
+        }
+
+        function loadSettingsFromStorage() {
+            const stored = localStorage.getItem('voiceGeneratorSettings');
+            if (stored) {
+                const settings = JSON.parse(stored);
+                document.getElementById('apiKey').value = settings.apiKey || '';
+                document.getElementById('voiceId').value = settings.voiceId || '';
+                document.getElementById('modelSelect').value = settings.model || 'eleven_flash_v2_5';
+                document.getElementById('stability').value = settings.stability || 50;
+                document.getElementById('similarity').value = settings.similarity || 65;
+                document.getElementById('styleExaggeration').value = settings.styleExaggeration || 0;
+                document.getElementById('speed').value = settings.speed || 0.85;
+                document.getElementById('autoSave').checked = settings.autoSave || false;
+                
+                updateSliderValue('stability', settings.stability || 50);
+                updateSliderValue('similarity', settings.similarity || 65);
+                updateSliderValue('styleExaggeration', settings.styleExaggeration || 0);
+                updateSliderValue('speed', settings.speed || 0.85);
+            }
+        }
+
+        // Voice generation
+        async function generateVoice() {
+            const script = document.getElementById('scriptInput').value.trim();
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const voiceId = document.getElementById('voiceId').value.trim();
+            
+            // Validation
+            if (!script) {
+                showToast('Please enter a script', 'error');
+                return;
+            }
+            if (!apiKey) {
+                showToast('Please enter your API key', 'error');
+                return;
+            }
+            if (!voiceId) {
+                showToast('Please enter a voice ID', 'error');
+                return;
+            }
+            if (script.length > 10000) {
+                showToast('Script exceeds 10,000 character limit', 'error');
+                return;
+            }
+
+            // Show progress
+            showProgress();
+            
+            // Add voice ID to recent list
+            addToRecentVoiceIds(voiceId);
+            
+            try {
+                const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream`, {
+                    method: 'POST',
+                    headers: {
+                        'xi-api-key': apiKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: script,
+                        model_id: document.getElementById('modelSelect').value,
+                        voice_settings: {
+                            stability: parseInt(document.getElementById('stability').value) / 100,
+                            similarity_boost: parseInt(document.getElementById('similarity').value) / 100,
+                            style: 0.0,
+                            style_exaggeration: parseInt(document.getElementById('styleExaggeration').value) / 100,
+                            speed: parseFloat(document.getElementById('speed').value)
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    const audioBlob = await response.blob();
+                    currentVoiceBlob = audioBlob;
+                    
+                    // Add to history
+                    addToVoiceHistory(script.substring(0, 50) + '...', audioBlob);
+                    
+                    showSuccess();
+                    
+                    // Auto-save if enabled
+                    if (document.getElementById('autoSave').checked) {
+                        downloadVoice();
+                    }
+                } else {
+                    const error = await response.text();
+                    throw new Error(`API Error: ${response.status} - ${error}`);
+                }
+            } catch (error) {
+                console.error('Generation error:', error);
+                showError(error.message);
+            }
+        }
+
+        function showProgress() {
+            document.getElementById('progressContainer').classList.remove('hidden');
+            document.getElementById('successContainer').classList.add('hidden');
+            document.getElementById('errorContainer').classList.add('hidden');
+            document.getElementById('generateBtn').disabled = true;
+        }
+
+        function showSuccess() {
+            document.getElementById('progressContainer').classList.add('hidden');
+            document.getElementById('successContainer').classList.remove('hidden');
+            document.getElementById('errorContainer').classList.add('hidden');
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('successMessage').textContent = `Voice ${voiceCounter} ready for download`;
+        }
+
+        function showError(message) {
+            document.getElementById('progressContainer').classList.add('hidden');
+            document.getElementById('successContainer').classList.add('hidden');
+            document.getElementById('errorContainer').classList.remove('hidden');
+            document.getElementById('generateBtn').disabled = false;
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Download functionality
+        function downloadVoice() {
+            if (!currentVoiceBlob) {
+                showToast('No voice to download', 'error');
+                return;
+            }
+            
+            const url = URL.createObjectURL(currentVoiceBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `voice_${voiceCounter}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.mp3`;
+            a.target = '_blank'; // Open in new tab
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Voice downloaded successfully!', 'success');
+        }
+
+        // Voice history management
+        function addToVoiceHistory(preview, blob) {
+            const historyItem = {
+                id: voiceCounter,
+                preview: preview,
+                blob: blob,
+                timestamp: new Date().toISOString(),
+                settings: {
+                    voiceId: document.getElementById('voiceId').value,
+                    model: document.getElementById('modelSelect').value
+                }
+            };
+            
+            voiceHistory.unshift(historyItem);
+            voiceCounter++;
+            
+            // Keep only last 10 items
+            if (voiceHistory.length > 10) {
+                voiceHistory = voiceHistory.slice(0, 10);
+            }
+            
+            updateVoiceHistoryDisplay();
+            saveHistoryToStorage();
+        }
+
+        function updateVoiceHistoryDisplay() {
+            const container = document.getElementById('voiceHistory');
+            
+            if (voiceHistory.length === 0) {
+                container.innerHTML = '<div class="text-sm text-muted-foreground text-center py-4">No voices generated yet</div>';
+                return;
+            }
+            
+            container.innerHTML = voiceHistory.map(item => `
+                <div class="voice-item bg-muted rounded-lg p-3 cursor-pointer" onclick="playVoice(${item.id})">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="font-medium text-sm">Voice ${item.id}</div>
+                            <div class="text-xs text-muted-foreground">${item.preview}</div>
+                            <div class="text-xs text-muted-foreground mt-1">
+                                ${new Date(item.timestamp).toLocaleTimeString()}
+                            </div>
+                        </div>
+                        <button onclick="downloadHistoryVoice(${item.id}); event.stopPropagation();" class="text-primary hover:text-primary/80">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function downloadHistoryVoice(id) {
+            const item = voiceHistory.find(h => h.id === id);
+            if (item) {
+                const url = URL.createObjectURL(item.blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `voice_${id}_${new Date(item.timestamp).toISOString().slice(0, 19).replace(/:/g, '-')}.mp3`;
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function playVoice(id) {
+            const item = voiceHistory.find(h => h.id === id);
+            if (item) {
+                const audio = new Audio(URL.createObjectURL(item.blob));
+                audio.play();
+            }
+        }
+
+        function clearHistory() {
+            voiceHistory = [];
+            updateVoiceHistoryDisplay();
+            saveHistoryToStorage();
+            showToast('History cleared', 'success');
+        }
+
+        function saveHistoryToStorage() {
+            // Note: We can't store blobs in localStorage, so we'll only store metadata
+            const historyMetadata = voiceHistory.map(item => ({
+                id: item.id,
+                preview: item.preview,
+                timestamp: item.timestamp,
+                settings: item.settings
+            }));
+            localStorage.setItem('voiceGeneratorHistory', JSON.stringify(historyMetadata));
+        }
+
+        function loadHistoryFromStorage() {
+            const stored = localStorage.getItem('voiceGeneratorHistory');
+            if (stored) {
+                const historyMetadata = JSON.parse(stored);
+                // We can only restore the metadata, not the actual audio blobs
+                updateVoiceHistoryDisplay();
+            }
+        }
+
+        // Recent Voice IDs management
+        function addToRecentVoiceIds(voiceId) {
+            if (!recentVoiceIds.includes(voiceId)) {
+                recentVoiceIds.unshift(voiceId);
+                if (recentVoiceIds.length > 5) {
+                    recentVoiceIds = recentVoiceIds.slice(0, 5);
+                }
+                updateRecentVoiceIdsDisplay();
+                localStorage.setItem('recentVoiceIds', JSON.stringify(recentVoiceIds));
+            }
+        }
+
+        function updateRecentVoiceIdsDisplay() {
+            const container = document.getElementById('recentVoiceIds');
+            
+            if (recentVoiceIds.length === 0) {
+                container.innerHTML = '<div class="text-sm text-muted-foreground text-center py-2">No recent voice IDs</div>';
+                return;
+            }
+            
+            container.innerHTML = recentVoiceIds.map(voiceId => `
+                <button onclick="selectVoiceId('${voiceId}')" class="w-full text-left bg-muted hover:bg-accent px-3 py-2 rounded-lg transition-colors text-sm">
+                    <i class="fas fa-microphone mr-2"></i>
+                    ${voiceId.substring(0, 12)}...
+                </button>
+            `).join('');
+        }
+
+        function selectVoiceId(voiceId) {
+            document.getElementById('voiceId').value = voiceId;
+            showToast('Voice ID selected', 'success');
+        }
+
+        function showRecentVoices() {
+            document.getElementById('recentVoicesModal').classList.remove('hidden');
+            
+            const container = document.getElementById('recentVoicesList');
+            if (recentVoiceIds.length === 0) {
+                container.innerHTML = '<div class="text-sm text-muted-foreground text-center py-4">No recent voice IDs</div>';
+                return;
+            }
+            
+            container.innerHTML = recentVoiceIds.map(voiceId => `
+                <button onclick="selectVoiceId('${voiceId}'); closeRecentVoices();" class="w-full text-left bg-muted hover:bg-accent px-3 py-2 rounded-lg transition-colors">
+                    <div class="font-medium">${voiceId}</div>
+                    <div class="text-xs text-muted-foreground">Click to select</div>
+                </button>
+            `).join('');
+        }
+
+        function closeRecentVoices() {
+            document.getElementById('recentVoicesModal').classList.add('hidden');
+        }
+
+        // Export functionality
+        function exportHistory() {
+            const data = {
+                history: voiceHistory.map(item => ({
+                    id: item.id,
+                    preview: item.preview,
+                    timestamp: item.timestamp,
+                    settings: item.settings
+                })),
+                recentVoiceIds: recentVoiceIds,
+                settings: JSON.parse(localStorage.getItem('voiceGeneratorSettings') || '{}')
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `voice_generator_export_${new Date().toISOString().slice(0, 10)}.json`;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            if (type === 'success') {
+                toast.className += ' bg-green-600 text-white';
+            } else if (type === 'error') {
+                toast.className += ' bg-red-600 text-white';
+            } else {
+                toast.className += ' bg-blue-600 text-white';
+            }
+            
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Load recent voice IDs on startup
+        document.addEventListener('DOMContentLoaded', function() {
+            const stored = localStorage.getItem('recentVoiceIds');
+            if (stored) {
+                recentVoiceIds = JSON.parse(stored);
+                updateRecentVoiceIdsDisplay();
+            }
+        });
+    </script>
+</body>
+</html>
