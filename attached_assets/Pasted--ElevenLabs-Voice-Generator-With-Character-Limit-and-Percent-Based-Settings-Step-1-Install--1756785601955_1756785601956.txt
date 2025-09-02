@@ -1,0 +1,183 @@
+🗣️ ElevenLabs Voice Generator – With Character Limit and Percent-Based Settings
+
+Step 1: Install required package
+
+!pip install -q requests
+
+
+Step 2: Upload your .txt file
+
+from google.colab import files
+import re
+uploaded = files.upload()
+file_name = list(uploaded.keys())[0]
+with open(file_name, 'r', encoding='utf-8') as f:
+SCRIPT = f.read()
+
+
+✅ Convert to a single paragraph WITHOUT removing full stops or punctuation
+
+SCRIPT = ' '.join(SCRIPT.splitlines())  # Removes newlines, keeps punctuation
+SCRIPT = re.sub(r'\s+', ' ', SCRIPT).strip()  # Clean extra spaces
+
+
+Step 3: Show character usage and check against 10K credit limit
+
+print(f"📝 Total characters in script: {len(SCRIPT)}")
+CREDIT_LIMIT = 10000
+if len(SCRIPT) > CREDIT_LIMIT:
+print("⚠️ Your script is too long! It will exceed your 10K character limit.")
+print(f"🛑 Cut down by {len(SCRIPT) - CREDIT_LIMIT} characters.")
+else:
+remaining = CREDIT_LIMIT - len(SCRIPT)
+print(f"✅ Within limit. You still have {remaining} characters left.")
+
+
+Optional: Trim to fit limit
+
+def trim_script_to_limit(script, limit=10000):
+sentences = re.split(r'(?<=[.!?]) +', script)
+result, count = "", 0
+for sentence in sentences:
+if count + len(sentence) <= limit:
+result += sentence + " "
+count += len(sentence)
+else:
+break
+return result.strip()
+if len(SCRIPT) > CREDIT_LIMIT:
+SCRIPT = trim_script_to_limit(SCRIPT)
+print(f"✂️ Trimmed script to: {len(SCRIPT)} characters")
+
+
+Step 4: Count alphabetic characters (optional)
+
+alphabet_count = len(re.findall(r'[A-Za-zÀ-ÿ]', SCRIPT))
+print(f"🔡 Alphabetic characters only: {alphabet_count}")
+
+
+Step 5: Add your ElevenLabs API key and Voice ID
+
+API_KEY = "sk_df3fb5eb007ff6aea85df293e636bd2cbafaecc99ceef782"  # Replace with your real key
+VOICE_ID = "80lPKtzJMPh1vjYMUgwe"                               # Replace with your voice ID
+
+
+Step 6: Define voice settings using percentages
+
+STABILITY_PERCENT = 50               # 0–100
+SIMILARITY_PERCENT = 65             # 0–100
+STYLE_EXAGGERATION_PERCENT = 0.0      # 0–100
+SPEED = 0.85                          # 1.0 = normal speed
+STYLE = 0.0                          # Leave 0.0 unless using styled voices
+
+
+Step 7: Convert % to decimal
+
+def percent_to_decimal(p):
+return round(p / 100, 2)
+STABILITY = percent_to_decimal(STABILITY_PERCENT)
+SIMILARITY_BOOST = percent_to_decimal(SIMILARITY_PERCENT)
+STYLE_EXAGGERATION = percent_to_decimal(STYLE_EXAGGERATION_PERCENT)
+print(f"🎛️ Voice Settings:")
+print(f"   - Stability: {STABILITY} ({STABILITY_PERCENT}%)")
+print(f"   - Similarity Boost: {SIMILARITY_BOOST} ({SIMILARITY_PERCENT}%)")
+print(f"   - Style Exaggeration: {STYLE_EXAGGERATION} ({STYLE_EXAGGERATION_PERCENT}%)")
+print(f"   - Speed: {SPEED}")
+
+
+Step 8: Send to ElevenLabs API with animation spinner
+
+import time
+import threading
+import requests
+from IPython.display import display, HTML
+
+
+Animated spinner while waiting for API
+
+def spinning_cursor():
+while not done:
+for cursor in '|/-&#039;:
+print(f'\r🎧 Generating voice... please wait {cursor}', end='', flush=True)
+time.sleep(0.1)
+done = False
+spinner_thread = threading.Thread(target=spinning_cursor)
+spinner_thread.start()
+
+
+Send request
+
+url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream"
+headers = {
+"xi-api-key": API_KEY,
+"Content-Type": "application/json"
+}
+payload = {
+"text": SCRIPT,
+"model_id": "eleven_flash_v2_5",
+"voice_settings": {
+"stability": STABILITY,
+"similarity_boost": SIMILARITY_BOOST,
+"style": STYLE,
+"style_exaggeration": STYLE_EXAGGERATION,
+"speed": SPEED
+}
+}
+response = requests.post(url, headers=headers, json=payload)
+done = True
+time.sleep(0.3)
+print('\r✅ Voice generation completed!                   ')
+
+
+Step 9: Handle response and show RGB message
+
+if response.status_code == 200:
+with open("voice_output.mp3", "wb") as f:
+f.write(response.content)
+
+
+🌈 Show rainbow text for download message
+
+rainbow_html = """
+<h2 style="font-family:Arial, sans-serif;">
+<span style="color: red;">✅</span>
+<span style="color: orange;">D</span>
+<span style="color: gold;">o</span>
+<span style="color: green;">w</span>
+<span style="color: blue;">n</span>
+<span style="color: indigo;">l</span>
+<span style="color: violet;">o</span>
+<span style="color: deeppink;">a</span>
+<span style="color: teal;">d</span>
+<span style="color: purple;">i</span>
+<span style="color: crimson;">n</span>
+<span style="color: brown;">g</span>
+<span style="color: black;">...</span>
+</h2>
+"""
+display(HTML(rainbow_html))
+files.download("voice_output.mp3")
+else:
+print(f"❌ Error {response.status_code}")
+print(response.text)
+
+
+prompts :
+build me a website from this code .
+we paste API and VOICE ID and voice in generated show voice history by voice 1 voice 2 and so on .
+add option to switch between 2 or 3 model . model are below
+"model_id": "eleven_multilingual_v2"
+also
+eleven_flash_v2_5
+eleven_v3
+eleven_turbo_v2_5
+also
+style
+optional
+float
+0.0 - 1.0, default 0.0
+this to add must : voice must download as .mp3 file and when user clip download open next tab and download voice donot use existing tab make it one click download voice as .mp3 file on next tab open
+make UI more powerfull and professional also show recent used voice ID reset voice setting options elvenlab voice genrter is replced by ali voice generter Tool version 1.1 , add option auto save all generated
+voice at once . make UI more powerful.
+most need step : download voice as mp3 voice and download click auto download voice as mp3 donot switch page to download page make it one click download and option contact develop option add this watsapp number as link https://wa.me/&lt;03107835694>
+UI must look like upload image as reference
